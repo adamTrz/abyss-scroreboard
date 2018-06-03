@@ -1,8 +1,14 @@
 [ignore]
+.*/Libraries/react-native/React.js
+<PROJECT_ROOT>/node_modules/xdl/.*
 
 [include]
 flow-typed/
 
 [libs]
+
+[untyped]
+<PROJECT_ROOT>/node_modules/react-native-paper/.*
+
 
 [options]

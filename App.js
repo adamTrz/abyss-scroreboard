@@ -33,7 +33,6 @@ const App = createDrawerNavigator(
   },
   {
     contentComponent: Drawer,
-    headerMode: 'screen',
   }
 );
 
