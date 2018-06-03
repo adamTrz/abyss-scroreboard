@@ -5,12 +5,11 @@ import { SafeAreaView } from 'react-navigation';
 
 type Props = NavigationProps<{}>;
 
-export default class New extends React.Component<Props> {
-  render() {
-    return (
-      <SafeAreaView>
-        <Text>New Game </Text>
-      </SafeAreaView>
-    );
-  }
-}
+// eslint-disable-next-line no-unused-vars
+const NewScore = (props: Props) => (
+  <SafeAreaView>
+    <Text>New Game</Text>
+  </SafeAreaView>
+);
+
+export default NewScore;

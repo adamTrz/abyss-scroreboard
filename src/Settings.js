@@ -5,12 +5,11 @@ import { SafeAreaView } from 'react-navigation';
 
 type Props = NavigationProps<{}>;
 
-export default class Settings extends React.Component<Props> {
-  render() {
-    return (
-      <SafeAreaView>
-        <Text>Settings </Text>
-      </SafeAreaView>
-    );
-  }
-}
+// eslint-disable-next-line no-unused-vars
+const Settings = (props: Props) => (
+  <SafeAreaView>
+    <Text>Settings </Text>
+  </SafeAreaView>
+);
+
+export default Settings;
