@@ -11,10 +11,16 @@ import Drawer from './src/Drawer';
 
 const theme = {
   ...DefaultTheme,
+  dark: true,
   colors: {
     ...DefaultTheme.colors,
-    primary: 'tomato',
-    accent: 'yellow',
+    primary: '#123849',
+    text: '#fff',
+    background: '#091c20',
+  },
+  fonts: {
+    ...DefaultTheme.fonts,
+    light: 'lato-light',
   },
 };
 
@@ -23,7 +29,7 @@ const Router = createStackNavigator(
     Main: {
       screen: Main,
       navigationOptions: {
-        headerTitle: <Text>MY GAMES</Text>,
+        header: null,
       },
     },
     New: {
@@ -47,7 +53,7 @@ const Router = createStackNavigator(
   },
   {
     navigationOptions: ({ navigation }) => ({
-      headerRight: (
+      headerLeft: (
         <Button compact icon="menu" flat onPress={navigation.toggleDrawer} />
       ),
     }),
