@@ -2,6 +2,7 @@
 import React from 'react';
 import { DefaultTheme, Provider, Text, Button } from 'react-native-paper';
 import { createDrawerNavigator, createStackNavigator } from 'react-navigation';
+import { Font } from 'expo';
 
 import Main from './src';
 import New from './src/New';
@@ -21,6 +22,7 @@ const theme = {
   fonts: {
     ...DefaultTheme.fonts,
     light: 'lato-light',
+    medium: 'lato-regular',
   },
 };
 
@@ -71,10 +73,32 @@ const App = createDrawerNavigator(
   }
 );
 
-export default function Abyss() {
-  return (
-    <Provider theme={theme}>
-      <App />
-    </Provider>
-  );
+type State = {
+  fontLoaded: boolean,
+};
+
+export default class Abyss extends React.Component<void, State> {
+  state = {
+    fontLoaded: false,
+  };
+
+  async componentDidMount() {
+    this.loadFonts();
+  }
+
+  loadFonts = async () => {
+    await Font.loadAsync({
+      'lato-light': require('./assets/fonts/Lato-Light.ttf'),
+      'lato-regular': require('./assets/fonts/Lato-Regular.ttf'),
+    });
+    this.setState({ fontLoaded: true });
+  };
+
+  render() {
+    return this.state.fontLoaded ? (
+      <Provider theme={theme}>
+        <App />
+      </Provider>
+    ) : null;
+  }
 }
