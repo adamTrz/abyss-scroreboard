@@ -1,10 +1,12 @@
 /* @flow */
 import React from 'react';
-import { DefaultTheme, Provider } from 'react-native-paper';
+import { DefaultTheme, Provider, Text, Button } from 'react-native-paper';
 import { createDrawerNavigator, createStackNavigator } from 'react-navigation';
 
 import Main from './src';
-import Notifications from './src/Notifications';
+import New from './src/New';
+import NewScores from './src/NewScores';
+import Settings from './src/Settings';
 import Drawer from './src/Drawer';
 
 const theme = {
@@ -16,14 +18,41 @@ const theme = {
   },
 };
 
-const Router = createStackNavigator({
-  Main: {
-    screen: Main,
+const Router = createStackNavigator(
+  {
+    Main: {
+      screen: Main,
+      navigationOptions: {
+        headerTitle: <Text>MY GAMES</Text>,
+      },
+    },
+    New: {
+      screen: New,
+      navigationOptions: {
+        headerTitle: <Text>NEW GAME</Text>,
+      },
+    },
+    NewScores: {
+      screen: NewScores,
+      navigationOptions: {
+        headerTitle: <Text>NEW GAME</Text>,
+      },
+    },
+    Settings: {
+      screen: Settings,
+      navigationOptions: {
+        headerTitle: <Text>SETTINGS</Text>,
+      },
+    },
   },
-  Notifications: {
-    screen: Notifications,
-  },
-});
+  {
+    navigationOptions: ({ navigation }) => ({
+      headerRight: (
+        <Button compact icon="menu" flat onPress={navigation.toggleDrawer} />
+      ),
+    }),
+  }
+);
 
 const App = createDrawerNavigator(
   {

@@ -5,11 +5,11 @@ import { SafeAreaView } from 'react-navigation';
 
 type Props = NavigationProps<{}>;
 
-export default class App extends React.Component<Props> {
+export default class New extends React.Component<Props> {
   render() {
     return (
       <SafeAreaView>
-        <Text>MY GAMES</Text>
+        <Text>New Game </Text>
       </SafeAreaView>
     );
   }
