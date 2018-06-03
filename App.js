@@ -2,7 +2,7 @@
 import React from 'react';
 import { DefaultTheme, Provider, Text, Button } from 'react-native-paper';
 import { createDrawerNavigator, createStackNavigator } from 'react-navigation';
-import { Font } from 'expo';
+import { Font, AppLoading } from 'expo';
 
 import Main from './src';
 import New from './src/New';
@@ -48,6 +48,7 @@ const Router = createStackNavigator(
     },
   },
   {
+    initialRouteName: 'New',
     navigationOptions: ({ navigation }) => ({
       headerLeft: (
         <Button compact icon="menu" flat onPress={navigation.toggleDrawer} />
@@ -68,31 +69,33 @@ const App = createDrawerNavigator(
 );
 
 type State = {
-  fontLoaded: boolean,
+  fontsLoaded: boolean,
 };
 
 export default class Abyss extends React.Component<void, State> {
   state = {
-    fontLoaded: false,
+    fontsLoaded: false,
   };
-
-  async componentDidMount() {
-    this.loadFonts();
-  }
 
   loadFonts = async () => {
     await Font.loadAsync({
       'lato-light': require('./assets/fonts/Lato-Light.ttf'),
       'lato-regular': require('./assets/fonts/Lato-Regular.ttf'),
+      spqr: require('./assets/fonts/spqr.ttf'),
     });
-    this.setState({ fontLoaded: true });
+    this.setState({ fontsLoaded: true });
   };
 
   render() {
-    return this.state.fontLoaded ? (
+    return !this.state.fontsLoaded ? (
+      <AppLoading
+        startAsync={this.loadFonts}
+        onFinish={() => this.setState({ fontsLoaded: true })}
+      />
+    ) : (
       <Provider theme={appTheme}>
         <App />
       </Provider>
-    ) : null;
+    );
   }
 }

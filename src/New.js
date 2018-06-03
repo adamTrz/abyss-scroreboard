@@ -192,10 +192,7 @@ const styles = StyleSheet.create({
     marginLeft: 10,
   },
   cta: {
-    // width: width - 30,
     backgroundColor: theme.colors.accent,
-    // marginVertical: 20,
-    // marginLeft: 10,
     position: 'absolute',
     bottom: 20,
     left: 10,
