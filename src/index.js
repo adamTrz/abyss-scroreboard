@@ -4,6 +4,8 @@ import { Image, StyleSheet, Dimensions } from 'react-native';
 import { Text, Button } from 'react-native-paper';
 import { SafeAreaView } from 'react-navigation';
 
+import theme from '../theme';
+
 const { width } = Dimensions.get('window');
 
 type Props = NavigationProps<{}>;
@@ -29,7 +31,7 @@ export default class App extends React.Component<Props> {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#091c20',
+    backgroundColor: theme.colors.background,
     alignItems: 'center',
   },
   image: {

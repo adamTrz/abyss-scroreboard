@@ -9,20 +9,18 @@ import New from './src/New';
 import NewScores from './src/NewScores';
 import Settings from './src/Settings';
 import Drawer from './src/Drawer';
+import theme from './theme';
 
-const theme = {
+const appTheme = {
   ...DefaultTheme,
   dark: true,
   colors: {
     ...DefaultTheme.colors,
-    primary: '#123849',
-    text: '#fff',
-    background: '#091c20',
+    ...theme.colors,
   },
   fonts: {
     ...DefaultTheme.fonts,
-    light: 'lato-light',
-    medium: 'lato-regular',
+    ...theme.fonts,
   },
 };
 
@@ -30,15 +28,11 @@ const Router = createStackNavigator(
   {
     Main: {
       screen: Main,
-      navigationOptions: {
-        header: null,
-      },
+      navigationOptions: { header: null },
     },
     New: {
       screen: New,
-      navigationOptions: {
-        headerTitle: <Text>NEW GAME</Text>,
-      },
+      navigationOptions: { header: null },
     },
     NewScores: {
       screen: NewScores,
@@ -96,7 +90,7 @@ export default class Abyss extends React.Component<void, State> {
 
   render() {
     return this.state.fontLoaded ? (
-      <Provider theme={theme}>
+      <Provider theme={appTheme}>
         <App />
       </Provider>
     ) : null;

@@ -4,6 +4,8 @@ import { StyleSheet, Image } from 'react-native';
 import { SafeAreaView, DrawerActions } from 'react-navigation';
 import { DrawerItem } from 'react-native-paper';
 
+import theme from '../theme';
+
 const items = [
   { label: 'My games', route: 'Main' },
   { label: 'New Game', route: 'New' },
@@ -46,7 +48,7 @@ export default class Drawer extends React.Component<Props> {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#000',
+    backgroundColor: theme.colors.drawerBackground,
     alignItems: 'center',
   },
   avatar: {
