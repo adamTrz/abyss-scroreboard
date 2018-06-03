@@ -7,7 +7,7 @@ import { DrawerItem } from 'react-native-paper';
 import theme from '../theme';
 
 const items = [
-  { label: 'My games', route: 'Main' },
+  { label: 'My Games', route: 'Main' },
   { label: 'New Game', route: 'New' },
   { label: 'Settings', route: 'Settings' },
   { label: 'Disclaimer', route: 'Disclaimer' },
