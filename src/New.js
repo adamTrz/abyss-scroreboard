@@ -51,7 +51,7 @@ export default class NewScore extends React.Component<Props, State> {
       }
     >
       <View style={styles.row}>
-        <Paragraph>{label}</Paragraph>
+        <Paragraph>{`Expansion: ${label}`}</Paragraph>
         <View pointerEvents="none">
           <Checkbox checked={this.state[stateKey]} />
         </View>
@@ -93,8 +93,8 @@ export default class NewScore extends React.Component<Props, State> {
             style={styles.image}
             source={require('../assets/images/emissaires2.jpg')}
           />
-          {this.renderRow('Expansion Kraken', 'expKraken')}
-          {this.renderRow('Expansion Leviathan', 'expLeviathan')}
+          {this.renderRow('Kraken', 'expKraken')}
+          {this.renderRow('Leviathan', 'expLeviathan')}
           <View style={styles.inputContainerStyle}>
             <TextInput
               theme={inputTheme}
@@ -148,7 +148,7 @@ export default class NewScore extends React.Component<Props, State> {
           ]}
           style={styles.titleBar}
         >
-          <Headline>Create new game</Headline>
+          <Headline style={{ fontFamily: 'spqr' }}>Create new game</Headline>
         </LinearGradient>
       </SafeAreaView>
     );

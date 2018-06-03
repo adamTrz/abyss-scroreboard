@@ -24,8 +24,9 @@ export default class Drawer extends React.Component<Props> {
 
   renderItem = (item: { label: string, route: string }) => (
     <DrawerItem
+      theme={{ fonts: { medium: 'spqr' } }}
       key={item.label}
-      label={item.label}
+      label={item.label.toUpperCase()}
       onPress={() => this.navigateTo(item.route)}
       icon={require('../assets/images/pearl.png')}
       style={styles.drawerItem}
