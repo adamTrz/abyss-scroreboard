@@ -37,10 +37,14 @@ type State = {
 
 export default class NewScore extends React.Component<Props, State> {
   state = {
-    expKraken: false,
-    expLeviathan: false,
-    playersCount: null,
-    players: [],
+    expKraken: true,
+    expLeviathan: true,
+    playersCount: 5,
+    players: ['a', 'b', 'c', 'd', 'e'],
+    // expKraken: false,
+    // expLeviathan: false,
+    // playersCount: null,
+    // players: [],
   };
 
   playerInputs: Array<?TextInput> = [];
@@ -125,7 +129,7 @@ export default class NewScore extends React.Component<Props, State> {
                   theme={inputTheme}
                   key={`player${count}`}
                   style={styles.input}
-                  value={this.state[`player${count}`]}
+                  value={this.state.players[count]}
                   placeholder={`Player ${count + 1} name`}
                   onChangeText={text =>
                     this.setState(state => ({
