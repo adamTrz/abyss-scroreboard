@@ -15,7 +15,7 @@ export default class App extends React.Component<Props> {
       <SafeAreaView style={styles.container}>
         <ImageBackground
           style={styles.bg}
-          source={require('../assets/images/background-artbook.jpg')}
+          source={require('../assets/images/background-default.jpg')}
         >
           <Image
             style={styles.image}

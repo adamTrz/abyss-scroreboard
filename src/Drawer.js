@@ -56,7 +56,7 @@ const styles = StyleSheet.create({
     marginVertical: 50,
     width: 120,
     height: 120,
-    borderRadius: 120,
+    borderRadius: 60,
   },
   drawerItem: {
     alignSelf: 'flex-start',
