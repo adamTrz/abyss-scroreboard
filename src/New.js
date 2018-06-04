@@ -31,15 +31,16 @@ type Props = NavigationProps<{}>;
 type State = {
   expKraken: boolean,
   expLeviathan: boolean,
-  players: ?number,
-  [key: string]: string,
+  playersCount: ?number,
+  players: Array<?string>,
 };
 
 export default class NewScore extends React.Component<Props, State> {
   state = {
     expKraken: false,
     expLeviathan: false,
-    players: null,
+    playersCount: null,
+    players: [],
   };
 
   playerInputs: Array<?TextInput> = [];
@@ -63,12 +64,12 @@ export default class NewScore extends React.Component<Props, State> {
 
   handlePlayersChange = (text: string) => {
     if (!text) {
-      this.setState({ players: null });
+      this.setState({ playersCount: null });
       return;
     }
     // TODO: allow only 1,2,3,4,5 values
     const newText = text.split(/ /)[0].replace(/[^\d]/g, '');
-    this.setState({ players: parseInt(newText, 10) });
+    this.setState({ playersCount: parseInt(newText, 10) });
   };
 
   createScoreboard = () => {
@@ -78,21 +79,18 @@ export default class NewScore extends React.Component<Props, State> {
     });
   };
 
-  handleEndEditing = (nextInputIdx: number, players: ?number) => {
-    if (!players || nextInputIdx >= players) return;
+  handleEndEditing = (nextInputIdx: number, playersCount: ?number) => {
+    if (!playersCount || nextInputIdx >= playersCount) return;
     if (this.playerInputs[nextInputIdx])
       this.playerInputs[nextInputIdx].focus();
   };
 
   render() {
-    const { expLeviathan, players } = this.state;
+    const { expLeviathan, playersCount, players } = this.state;
     const maxPlayersCount = expLeviathan ? 5 : 4;
-    const inputError = !players || players > maxPlayersCount;
-    const buttonDisabled =
-      inputError ||
-      times(players, player => this.state[`player${player}`]).some(
-        playerName => !playerName
-      );
+    const inputError = !playersCount || playersCount > maxPlayersCount;
+    console.log('POOP', players);
+    const buttonDisabled = inputError || players.length !== playersCount;
 
     return (
       <SafeAreaView style={styles.container}>
@@ -108,15 +106,15 @@ export default class NewScore extends React.Component<Props, State> {
               theme={inputTheme}
               style={styles.input}
               label={`Number of players (max. ${maxPlayersCount})`}
-              value={players ? players.toString() : ''}
+              value={playersCount ? playersCount.toString() : ''}
               onChangeText={this.handlePlayersChange}
-              error={!!players && inputError}
+              error={!!playersCount && inputError}
               keyboardType="numeric"
             />
             <HelperText
               style={styles.errorText}
               type="error"
-              visible={!!players && inputError}
+              visible={!!playersCount && inputError}
             >
               {`Maximum ${maxPlayersCount} players!`}
             </HelperText>
@@ -124,7 +122,7 @@ export default class NewScore extends React.Component<Props, State> {
           {!inputError && (
             <React.Fragment>
               <Paragraph style={styles.paragraph}>Player names:</Paragraph>
-              {times(players, count => (
+              {times(playersCount, count => (
                 <TextInput
                   theme={inputTheme}
                   key={`player${count}`}
@@ -132,10 +130,18 @@ export default class NewScore extends React.Component<Props, State> {
                   value={this.state[`player${count}`]}
                   placeholder={`Player ${count + 1} name`}
                   onChangeText={text =>
-                    this.setState({ [`player${count}`]: text })
+                    this.setState(state => ({
+                      players: [
+                        ...state.players.slice(0, count),
+                        text,
+                        ...state.players.slice(count + 2),
+                      ],
+                    }))
                   }
-                  returnKeyType={count - 1 === players ? 'done' : 'next'}
-                  onEndEditing={() => this.handleEndEditing(count + 1, players)}
+                  returnKeyType={count - 1 === playersCount ? 'done' : 'next'}
+                  onEndEditing={() =>
+                    this.handleEndEditing(count + 1, playersCount)
+                  }
                   ref={ref => {
                     this.playerInputs[count] = ref;
                   }}
