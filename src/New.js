@@ -89,9 +89,7 @@ export default class NewScore extends React.Component<Props, State> {
     const { expLeviathan, playersCount, players } = this.state;
     const maxPlayersCount = expLeviathan ? 5 : 4;
     const inputError = !playersCount || playersCount > maxPlayersCount;
-    console.log('POOP', players);
     const buttonDisabled = inputError || players.length !== playersCount;
-
     return (
       <SafeAreaView style={styles.container}>
         <KeyboardAwareScrollView enableOnAndroid style={styles.scrollView}>
