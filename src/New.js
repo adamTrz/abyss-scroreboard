@@ -42,6 +42,8 @@ export default class NewScore extends React.Component<Props, State> {
     players: null,
   };
 
+  playerInputs: Array<?TextInput> = [];
+
   renderRow = (label: string, stateKey: 'expKraken' | 'expLeviathan') => (
     <TouchableRipple
       onPress={() =>
@@ -74,6 +76,12 @@ export default class NewScore extends React.Component<Props, State> {
       routeName: 'NewScores',
       params: { ...this.state },
     });
+  };
+
+  handleEndEditing = (nextInputIdx: number, players: ?number) => {
+    if (!players || nextInputIdx >= players) return;
+    if (this.playerInputs[nextInputIdx])
+      this.playerInputs[nextInputIdx].focus();
   };
 
   render() {
@@ -126,6 +134,11 @@ export default class NewScore extends React.Component<Props, State> {
                   onChangeText={text =>
                     this.setState({ [`player${count}`]: text })
                   }
+                  returnKeyType={count - 1 === players ? 'done' : 'next'}
+                  onEndEditing={() => this.handleEndEditing(count + 1, players)}
+                  ref={ref => {
+                    this.playerInputs[count] = ref;
+                  }}
                 />
               ))}
             </React.Fragment>

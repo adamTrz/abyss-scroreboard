@@ -8,7 +8,10 @@ flow-typed/
 [libs]
 
 [untyped]
+<PROJECT_ROOT>/node_modules/react-native/Libraries/react-native/.*
 <PROJECT_ROOT>/node_modules/react-native-paper/.*
+<PROJECT_ROOT>/node_modules/react-native-keyboard-aware-scroll-view/.*
+<PROJECT_ROOT>/node_modules/expo/.*
 
 
 [options]
