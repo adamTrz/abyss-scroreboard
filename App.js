@@ -50,6 +50,7 @@ const Router = createStackNavigator(
   {
     navigationOptions: ({ navigation }) => ({
       headerLeft: (
+        // $FlowFixMe we don't want to pass children to Button
         <Button compact icon="menu" flat onPress={navigation.toggleDrawer} />
       ),
     }),

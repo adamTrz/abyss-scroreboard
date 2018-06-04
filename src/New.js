@@ -110,13 +110,13 @@ export default class NewScore extends React.Component<Props, State> {
               label={`Number of players (max. ${maxPlayersCount})`}
               value={players ? players.toString() : ''}
               onChangeText={this.handlePlayersChange}
-              error={players && inputError}
+              error={!!players && inputError}
               keyboardType="numeric"
             />
             <HelperText
               style={styles.errorText}
               type="error"
-              visible={players && inputError}
+              visible={!!players && inputError}
             >
               {`Maximum ${maxPlayersCount} players!`}
             </HelperText>

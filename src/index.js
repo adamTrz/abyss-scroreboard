@@ -22,6 +22,7 @@ export default class App extends React.Component<Props> {
             source={require('../assets/images/logo-abyss.png')}
           />
           <Text style={styles.header}>MY GAMES</Text>
+          {/* $FlowFixMe we don't want to pass children to Button */}
           <Button
             icon="menu"
             onPress={this.props.navigation.toggleDrawer}
