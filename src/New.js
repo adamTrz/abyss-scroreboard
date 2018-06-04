@@ -15,6 +15,7 @@ import { LinearGradient, Constants } from 'expo';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import times from 'lodash.times';
 
+import BackButton from './components/BackButton';
 import theme from '../theme';
 
 const { width } = Dimensions.get('window');
@@ -31,8 +32,7 @@ type State = {
   expKraken: boolean,
   expLeviathan: boolean,
   players: ?number,
-  // TODO: type fields 'player1' and so on...
-  // [string]?: string
+  [key: string]: string,
 };
 
 export default class NewScore extends React.Component<Props, State> {
@@ -161,6 +161,7 @@ export default class NewScore extends React.Component<Props, State> {
           ]}
           style={styles.titleBar}
         >
+          <BackButton navigation={this.props.navigation} />
           <Headline style={{ fontFamily: 'spqr' }}>Create new game</Headline>
         </LinearGradient>
       </SafeAreaView>

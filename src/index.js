@@ -1,10 +1,11 @@
 /* @flow */
 import * as React from 'react';
 import { Image, StyleSheet, Dimensions, ImageBackground } from 'react-native';
-import { Text, Button } from 'react-native-paper';
+import { Text } from 'react-native-paper';
 import { SafeAreaView } from 'react-navigation';
 
 import theme from '../theme';
+import Hamburger from './components/Hamburger';
 
 const { width, height } = Dimensions.get('window');
 
@@ -22,12 +23,7 @@ export default class App extends React.Component<Props> {
             source={require('../assets/images/logo-abyss.png')}
           />
           <Text style={styles.header}>MY GAMES</Text>
-          {/* $FlowFixMe we don't want to pass children to Button */}
-          <Button
-            icon="menu"
-            onPress={this.props.navigation.toggleDrawer}
-            style={styles.hamburger}
-          />
+          <Hamburger navigation={this.props.navigation} />
         </ImageBackground>
       </SafeAreaView>
     );

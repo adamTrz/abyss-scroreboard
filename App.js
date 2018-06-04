@@ -1,8 +1,9 @@
 /* @flow */
 import React from 'react';
-import { DefaultTheme, Provider, Text, Button } from 'react-native-paper';
+import { DefaultTheme, Provider, Text } from 'react-native-paper';
 import { createDrawerNavigator, createStackNavigator } from 'react-navigation';
 import { Font, AppLoading, Asset } from 'expo';
+import { StatusBar } from 'react-native';
 
 import Main from './src';
 import New from './src/New';
@@ -24,38 +25,26 @@ const appTheme = {
   },
 };
 
-const Router = createStackNavigator(
-  {
-    Main: {
-      screen: Main,
-      navigationOptions: { header: null },
-    },
-    New: {
-      screen: New,
-      navigationOptions: { header: null },
-    },
-    NewScores: {
-      screen: NewScores,
-      navigationOptions: {
-        headerTitle: <Text>NEW GAME</Text>,
-      },
-    },
-    Settings: {
-      screen: Settings,
-      navigationOptions: {
-        headerTitle: <Text>SETTINGS</Text>,
-      },
+const Router = createStackNavigator({
+  Main: {
+    screen: Main,
+    navigationOptions: { header: null },
+  },
+  New: {
+    screen: New,
+    navigationOptions: { header: null },
+  },
+  NewScores: {
+    screen: NewScores,
+    navigationOptions: { header: null },
+  },
+  Settings: {
+    screen: Settings,
+    navigationOptions: {
+      headerTitle: <Text>SETTINGS</Text>,
     },
   },
-  {
-    navigationOptions: ({ navigation }) => ({
-      headerLeft: (
-        // $FlowFixMe we don't want to pass children to Button
-        <Button compact icon="menu" flat onPress={navigation.toggleDrawer} />
-      ),
-    }),
-  }
-);
+});
 
 const App = createDrawerNavigator(
   {
@@ -76,6 +65,10 @@ export default class Abyss extends React.Component<void, State> {
   state = {
     fontsLoaded: false,
   };
+
+  componentDidMount() {
+    StatusBar.setBarStyle('light-content');
+  }
 
   loadAssets = async () => {
     await this.loadImages();
