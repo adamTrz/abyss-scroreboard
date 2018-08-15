@@ -153,7 +153,6 @@ export default class NewScore extends React.Component<Props, State> {
           )}
         </KeyboardAwareScrollView>
         <Button
-          dark
           style={styles.cta}
           disabled={buttonDisabled}
           raised
