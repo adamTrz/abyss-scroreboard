@@ -22,17 +22,13 @@ const inputTheme = {
   },
 };
 
-type GameData = {
-  state: {
-    params: {
-      expKraken: boolean,
-      expLeviathan: boolean,
-      playersCount: number,
-      players: Array<string>,
-    },
-  },
+export type GameData = {
+  expKraken: boolean,
+  expLeviathan: boolean,
+  playersCount: number,
+  players: Array<string>,
 };
-type Props = NavigationProps<GameData>;
+type Props = NavigationProps<{ state: { params: GameData } }>;
 
 export type Category =
   | 'keys'

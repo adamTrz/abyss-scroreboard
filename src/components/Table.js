@@ -3,7 +3,7 @@ import * as React from 'react';
 import { StyleSheet, Dimensions, Image, View } from 'react-native';
 
 import theme from '../../theme';
-import type { Category } from '../NewScores';
+import type { Category, GameData } from '../NewScores';
 
 const { width } = Dimensions.get('window');
 
@@ -14,11 +14,7 @@ const images = {
   monsters: require('../../assets/images/monsters.png'),
 };
 
-type Props = {
-  expKraken: boolean,
-  expLeviathan: boolean,
-  playersCount: number,
-  players: Array<string>,
+type Props = GameData & {
   renderCell: (key: Category, player: string) => React.Element<*>,
 };
 
