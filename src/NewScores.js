@@ -109,8 +109,6 @@ class NewScores extends React.Component<Props, State> {
   };
 
   renderCell = (key: Category, player: string, index: number) => {
-    console.log(index);
-
     const playerScore = this.getScoreForPlayer(player, key);
     return (
       <TextInput
