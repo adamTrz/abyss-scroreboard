@@ -10,11 +10,13 @@ import {
 import { SafeAreaView } from 'react-navigation';
 import * as firebase from 'firebase';
 import { TextInput, Button, Text } from 'react-native-paper';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 import theme from '../theme';
 
 const { width } = Dimensions.get('window');
 const inputTheme = {
+  ...theme,
   colors: {
     ...theme.colors,
     disabled: theme.colors.text,
@@ -75,39 +77,45 @@ export default class Login extends React.Component<Props, State> {
           style={styles.bg}
           source={require('../assets/images/background-default.jpg')}
         >
-          <Image
-            style={styles.image}
-            source={require('../assets/images/logo-abyss.png')}
-          />
-          <Text style={styles.header}>Log In</Text>
-          <TextInput
-            theme={inputTheme}
-            style={styles.input}
-            label="Email"
-            value={this.state.email}
-            onChangeText={email => this.setState({ email })}
-            keyboardType="email-address"
-            returnKeyType="next"
-            onSubmitEditing={this.focusPaswordInput}
-          />
-          <TextInput
-            ref={ref => {
-              this.passwordInput = ref;
-            }}
-            theme={inputTheme}
-            style={styles.input}
-            label="Password"
-            value={this.state.password}
-            onChangeText={password => this.setState({ password })}
-            secureTextEntry
-            returnKeyType="go"
-            onSubmitEditing={this.signInWithUserAndPass}
-          />
+          <KeyboardAwareScrollView
+            enableOnAndroid
+            style={styles.scrollView}
+            contentContainerStyle={styles.scrollContainer}
+          >
+            <Image
+              style={styles.image}
+              source={require('../assets/images/logo-abyss.png')}
+            />
+            <Text style={styles.header}>Log In</Text>
+            <TextInput
+              theme={inputTheme}
+              style={styles.input}
+              label="Email"
+              value={this.state.email}
+              onChangeText={email => this.setState({ email })}
+              keyboardType="email-address"
+              returnKeyType="next"
+              onSubmitEditing={this.focusPaswordInput}
+            />
+            <TextInput
+              ref={ref => {
+                this.passwordInput = ref;
+              }}
+              theme={inputTheme}
+              style={styles.input}
+              label="Password"
+              value={this.state.password}
+              onChangeText={password => this.setState({ password })}
+              secureTextEntry
+              returnKeyType="go"
+              onSubmitEditing={this.signInWithUserAndPass}
+            />
+          </KeyboardAwareScrollView>
           <Button
-            dark
             style={styles.cta}
             raised
             onPress={this.signInWithUserAndPass}
+            disabled={!this.state.email || !this.state.password}
           >
             Log In
           </Button>
@@ -123,8 +131,14 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   bg: {
-    alignItems: 'center',
     flex: 1,
+  },
+  scrollView: {
+    flex: 1,
+    marginBottom: 60,
+  },
+  scrollContainer: {
+    alignItems: 'center',
   },
   image: {
     width,
