@@ -19,4 +19,15 @@ const theme = {
   },
 };
 
+export const inputTheme = {
+  ...theme,
+  colors: {
+    ...theme.colors,
+    disabled: theme.colors.text,
+    primary: theme.colors.text,
+    placeholder: theme.colors.text,
+    accent: theme.colors.accent,
+  },
+};
+
 export default theme;

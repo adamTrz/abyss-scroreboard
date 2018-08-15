@@ -15,7 +15,11 @@ const images = {
 };
 
 type Props = GameData & {
-  renderCell: (key: Category, player: string) => React.Element<*>,
+  renderCell: (
+    key: Category,
+    player: string,
+    index: number
+  ) => React.Element<*>,
 };
 
 class Table extends React.Component<Props> {
@@ -31,18 +35,18 @@ class Table extends React.Component<Props> {
       width: width / (playersCount + 1),
     };
     return (
-      <React.Fragment>
-        {Object.keys(images).map(key => (
+      <View style={styles.container}>
+        {Object.keys(images).map((key, index) => (
           <View style={styles.tableRow} key={`playerPoints_${key}`}>
             <View style={styles.firstCellImage}>
               <Image style={styles.tableImage} source={images[key]} />
             </View>
-            {players.map(player => (
+            {players.map((player, idx) => (
               <View
                 key={`player_${key}_${player}`}
                 style={[styles.tableHeaderCell, cellStyle]}
               >
-                {renderCell(key, player)}
+                {renderCell(key, player, index * playersCount + idx + 1)}
               </View>
             ))}
           </View>
@@ -55,12 +59,16 @@ class Table extends React.Component<Props> {
                 source={require('../../assets/images/black_pearl.png')}
               />
             </View>
-            {players.map(player => (
+            {players.map((player, idx) => (
               <View
                 key={`player_${player}_Nebulis`}
                 style={[styles.tableHeaderCell, cellStyle]}
               >
-                {renderCell('nebulis', player)}
+                {renderCell(
+                  'nebulis',
+                  player,
+                  (Object.keys(images).length + 1) * playersCount + idx + 1
+                )}
               </View>
             ))}
           </View>
@@ -74,12 +82,16 @@ class Table extends React.Component<Props> {
                   source={require('../../assets/images/monster_l.png')}
                 />
               </View>
-              {players.map(player => (
+              {players.map((player, idx) => (
                 <View
                   key={`player_${player}_Leviathan`}
                   style={[styles.tableHeaderCell, cellStyle]}
                 >
-                  {renderCell('leviathan', player)}
+                  {renderCell(
+                    'leviathan',
+                    player,
+                    (Object.keys(images).length + 2) * playersCount + (idx + 1)
+                  )}
                 </View>
               ))}
             </View>
@@ -90,7 +102,7 @@ class Table extends React.Component<Props> {
                   source={require('../../assets/images/wound.png')}
                 />
               </View>
-              {players.map(player => (
+              {players.map((player, idx) => (
                 <View
                   key={`player_${player}_LeviathanWounds`}
                   style={[
@@ -99,22 +111,27 @@ class Table extends React.Component<Props> {
                     { borderBottomWidth: 0 },
                   ]}
                 >
-                  {renderCell('wounds', player)}
+                  {renderCell(
+                    'wounds',
+                    player,
+                    (Object.keys(images).length + 3) * playersCount + idx + 1
+                  )}
                 </View>
               ))}
             </View>
           </React.Fragment>
         )}
-        <Image
-          source={require('../../assets/images/separator.png')}
-          style={styles.separator}
-        />
-      </React.Fragment>
+      </View>
     );
   }
 }
 
 const styles = StyleSheet.create({
+  container: {
+    borderColor: theme.colors.primary,
+    borderBottomWidth: StyleSheet.hairlineWidth,
+    marginBottom: 5,
+  },
   image: {
     width,
     height: 200,
@@ -145,12 +162,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     paddingVertical: 5,
-  },
-  separator: {
-    width: width - 20,
-    resizeMode: 'contain',
-    marginTop: 20,
-    marginHorizontal: 10,
   },
 });
 

@@ -16,16 +16,9 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 import times from 'lodash.times';
 
 import BackButton from './components/BackButton';
-import theme from '../theme';
+import theme, { inputTheme } from '../theme';
 
 const { width } = Dimensions.get('window');
-const inputTheme = {
-  colors: {
-    disabled: theme.colors.text,
-    primary: theme.colors.text,
-    placeholder: theme.colors.text,
-  },
-};
 
 type Props = NavigationProps<{}>;
 type State = {
@@ -151,15 +144,15 @@ export default class NewScore extends React.Component<Props, State> {
               ))}
             </React.Fragment>
           )}
+          <Button
+            style={styles.cta}
+            disabled={buttonDisabled}
+            raised
+            onPress={this.createScoreboard}
+          >
+            Create
+          </Button>
         </KeyboardAwareScrollView>
-        <Button
-          style={styles.cta}
-          disabled={buttonDisabled}
-          raised
-          onPress={this.createScoreboard}
-        >
-          Create
-        </Button>
         <LinearGradient
           colors={[
             'rgba(9, 29, 65, 1)',
@@ -184,7 +177,7 @@ const styles = StyleSheet.create({
   },
   scrollView: {
     flex: 1,
-    marginBottom: 60,
+    paddingBottom: 20,
   },
   image: {
     width,
@@ -214,11 +207,9 @@ const styles = StyleSheet.create({
   },
   cta: {
     backgroundColor: theme.colors.accent,
-    position: 'absolute',
-    bottom: 10,
-    left: 10,
-    right: 10,
-    alignSelf: 'flex-end',
+    alignSelf: 'center',
+    width: width - 40,
+    marginVertical: 20,
   },
   paragraph: {
     marginLeft: 10,

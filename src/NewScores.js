@@ -6,21 +6,13 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 import { StyleSheet, Dimensions, Image } from 'react-native';
 import { LinearGradient, Constants } from 'expo';
 
-import theme from '../theme';
+import theme, { inputTheme } from '../theme';
 import BackButton from './components/BackButton';
 import TableHeader from './components/TableHeader';
+import TableScores from './components/TableScores';
 import Table from './components/Table';
 
 const { width } = Dimensions.get('window');
-
-const inputTheme = {
-  colors: {
-    disabled: theme.colors.text,
-    primary: theme.colors.text,
-    placeholder: theme.colors.text,
-    accent: theme.colors.accent,
-  },
-};
 
 export type GameData = {
   expKraken: boolean,
@@ -59,6 +51,8 @@ class NewScores extends React.Component<Props, State> {
     scores: {},
   };
 
+  inputRefs: Array<?TextInput> = [];
+
   handleInputChange = (text: string, key: Category, player: string) => {
     this.setState(state => ({
       scores: {
@@ -71,24 +65,66 @@ class NewScores extends React.Component<Props, State> {
     }));
   };
 
+  focusNextInput = (index: number) => {
+    if (this.inputRefs[index + 1]) {
+      // $FlowFixMe
+      this.inputRefs[index + 1].focus();
+    }
+  };
+
   getScoreForPlayer = (player: string, key: Category): string => {
     const playerScores = this.state.scores[player];
     return playerScores && playerScores[key] ? playerScores[key] : '';
   };
 
-  saveScores = () => {
-    console.log(this.state);
+  calculateScores = () => {
+    const {
+      navigation: {
+        state: {
+          params: { players },
+        },
+      },
+    } = this.props;
+    const scores = players.map(player => {
+      const playerScores = this.state.scores[player];
+      if (!playerScores || !Object.values(playerScores).length) return 0;
+      return Object.entries(playerScores).reduce(
+        (prev, curr) =>
+          curr[0] === 'nebulis' || curr[0] === 'wounds'
+            ? prev - parseInt(curr[1], 10)
+            : prev + parseInt(curr[1], 10),
+        0
+      );
+    });
+    return scores;
   };
 
-  renderCell = (key: Category, player: string) => {
+  saveScores = () => {
+    const { scores } = this.state;
+    const playersTotal = this.calculateScores();
+    const wholeScores = Object.keys(scores).map((player, idx) => ({
+      [player]: { ...scores[player], total: playersTotal[idx] },
+    }));
+    console.log(wholeScores);
+  };
+
+  renderCell = (key: Category, player: string, index: number) => {
+    console.log(index);
+
     const playerScore = this.getScoreForPlayer(player, key);
     return (
       <TextInput
+        ref={ref => {
+          this.inputRefs[index] = ref;
+        }}
         theme={inputTheme}
         style={styles.input}
         value={playerScore}
         onChangeText={text => this.handleInputChange(text, key, player)}
+        onSubmitEditing={() => this.focusNextInput(index)}
         keyboardType="numeric"
+        maxLength={2}
+        returnKeyType="next"
       />
     );
   };
@@ -101,15 +137,14 @@ class NewScores extends React.Component<Props, State> {
         },
       },
     } = this.props;
+    const scores = this.calculateScores();
     return (
       <SafeAreaView style={styles.container}>
         <KeyboardAwareScrollView enableOnAndroid style={styles.scrollView}>
-          {/* TODO: Animate header */}
           <Image
             style={styles.image}
             source={require('../assets/images/politiciens.jpg')}
           />
-
           <TableHeader players={players} playersCount={playersCount} />
           <Table
             players={players}
@@ -118,11 +153,11 @@ class NewScores extends React.Component<Props, State> {
             expLeviathan={expLeviathan}
             renderCell={this.renderCell}
           />
+          <TableScores scores={scores} />
+          <Button style={styles.cta} raised onPress={this.saveScores}>
+            Save
+          </Button>
         </KeyboardAwareScrollView>
-        <Button style={styles.cta} raised onPress={this.saveScores}>
-          hakuna matata
-        </Button>
-        {/* TODO: Animate header */}
         <LinearGradient
           colors={['rgba(9, 29, 65, 1)', 'rgba(9, 29, 65, 0.3)']}
           style={styles.titleBar}
@@ -145,7 +180,7 @@ const styles = StyleSheet.create({
   },
   scrollView: {
     flex: 1,
-    marginBottom: 60,
+    paddingBottom: 20,
   },
   image: {
     width,
@@ -167,10 +202,8 @@ const styles = StyleSheet.create({
   },
   cta: {
     backgroundColor: theme.colors.accent,
-    position: 'absolute',
-    bottom: 10,
-    left: 10,
-    right: 10,
-    alignSelf: 'flex-end',
+    alignSelf: 'center',
+    width: width - 40,
+    marginVertical: 20,
   },
 });

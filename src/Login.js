@@ -12,19 +12,9 @@ import * as firebase from 'firebase';
 import { TextInput, Button, Text } from 'react-native-paper';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
-import theme from '../theme';
+import theme, { inputTheme } from '../theme';
 
 const { width } = Dimensions.get('window');
-const inputTheme = {
-  ...theme,
-  colors: {
-    ...theme.colors,
-    disabled: theme.colors.text,
-    primary: theme.colors.text,
-    placeholder: theme.colors.text,
-    accent: theme.colors.accent,
-  },
-};
 
 type Props = NavigationProps<{}>;
 
