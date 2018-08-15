@@ -5,18 +5,14 @@ import { SafeAreaView } from 'react-navigation';
 
 import theme from '../theme';
 
-export default class SplashScreen extends React.Component<void> {
-  render() {
-    return (
-      <SafeAreaView style={styles.container}>
-        <ImageBackground
-          style={styles.bg}
-          source={require('../assets/images/splash.png')}
-        />
-      </SafeAreaView>
-    );
-  }
-}
+const SplashScreen = () => (
+  <SafeAreaView style={styles.container}>
+    <ImageBackground
+      style={styles.bg}
+      source={require('../assets/images/splash.png')}
+    />
+  </SafeAreaView>
+);
 
 const styles = StyleSheet.create({
   container: {
@@ -28,3 +24,5 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
 });
+
+export default SplashScreen;

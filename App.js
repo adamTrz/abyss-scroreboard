@@ -13,6 +13,7 @@ import * as firebase from 'firebase';
 import Main from './src';
 import New from './src/New';
 import NewScores from './src/NewScores';
+import SplashScreen from './src/SplashScreen';
 import Login from './src/Login';
 import Settings from './src/Settings';
 import Drawer from './src/Drawer';
@@ -154,7 +155,7 @@ class Loading extends React.Component<Props> {
   }
 
   render() {
-    return null;
+    return <SplashScreen />;
   }
 }
 
