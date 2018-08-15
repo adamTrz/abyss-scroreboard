@@ -1,13 +1,15 @@
 /* @flow */
 import * as React from 'react';
-import { Headline, Paragraph, TextInput, Button } from 'react-native-paper';
+import { Headline, TextInput, Button } from 'react-native-paper';
 import { SafeAreaView } from 'react-navigation';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import { StyleSheet, Dimensions, Image, View } from 'react-native';
+import { StyleSheet, Dimensions, Image } from 'react-native';
 import { LinearGradient, Constants } from 'expo';
 
 import theme from '../theme';
 import BackButton from './components/BackButton';
+import TableHeader from './components/TableHeader';
+import Table from './components/Table';
 
 const { width } = Dimensions.get('window');
 
@@ -18,13 +20,6 @@ const inputTheme = {
     placeholder: theme.colors.text,
     accent: theme.colors.accent,
   },
-};
-
-const images = {
-  keys: require('../assets/images/keys.png'),
-  lords: require('../assets/images/lords.png'),
-  allies: require('../assets/images/allies.png'),
-  monsters: require('../assets/images/monsters.png'),
 };
 
 type GameData = {
@@ -39,7 +34,7 @@ type GameData = {
 };
 type Props = NavigationProps<GameData>;
 
-type Categories =
+export type Category =
   | 'keys'
   | 'lords'
   | 'allies'
@@ -68,7 +63,7 @@ class NewScores extends React.Component<Props, State> {
     scores: {},
   };
 
-  handleInputChange = (text: string, key: Categories, player: string) => {
+  handleInputChange = (text: string, key: Category, player: string) => {
     this.setState(state => ({
       scores: {
         ...state.scores,
@@ -80,13 +75,26 @@ class NewScores extends React.Component<Props, State> {
     }));
   };
 
-  getScoreForPlayer = (player: string, key: Categories): string => {
+  getScoreForPlayer = (player: string, key: Category): string => {
     const playerScores = this.state.scores[player];
     return playerScores && playerScores[key] ? playerScores[key] : '';
   };
 
   saveScores = () => {
     console.log(this.state);
+  };
+
+  renderCell = (key: Category, player: string) => {
+    const playerScore = this.getScoreForPlayer(player, key);
+    return (
+      <TextInput
+        theme={inputTheme}
+        style={styles.input}
+        value={playerScore}
+        onChangeText={text => this.handleInputChange(text, key, player)}
+        keyboardType="numeric"
+      />
+    );
   };
 
   render() {
@@ -97,9 +105,6 @@ class NewScores extends React.Component<Props, State> {
         },
       },
     } = this.props;
-    const cellStyle = {
-      width: width / (playersCount + 1),
-    };
     return (
       <SafeAreaView style={styles.container}>
         <KeyboardAwareScrollView enableOnAndroid style={styles.scrollView}>
@@ -108,151 +113,19 @@ class NewScores extends React.Component<Props, State> {
             style={styles.image}
             source={require('../assets/images/politiciens.jpg')}
           />
-          <View style={styles.tableRow}>
-            <View style={styles.firstCellImage}>
-              <View style={styles.empty} />
-            </View>
-            {/* TODO: Refactor to TableHeader component */}
-            {players.map(player => (
-              <View
-                key={`player${player}`}
-                style={[styles.tableHeaderCell, cellStyle]}
-              >
-                <Paragraph numberOfLines={1} style={{ fontFamily: 'spqr' }}>
-                  {player}
-                </Paragraph>
-              </View>
-            ))}
-          </View>
-          {Object.keys(images).map(key => (
-            // Row
-            <View style={styles.tableRow} key={`playerPoints_${key}`}>
-              <View style={styles.firstCellImage}>
-                <Image style={styles.tableImage} source={images[key]} />
-              </View>
-              {players.map(player => {
-                const playerScore = this.getScoreForPlayer(player, key);
-                return (
-                  <View
-                    key={`player_${key}_${player}`}
-                    style={[styles.tableHeaderCell, cellStyle]}
-                  >
-                    <TextInput
-                      theme={inputTheme}
-                      style={styles.input}
-                      value={playerScore}
-                      onChangeText={text =>
-                        this.handleInputChange(text, key, player)
-                      }
-                      keyboardType="numeric"
-                    />
-                  </View>
-                );
-              })}
-            </View>
-          ))}
-          {expKraken && (
-            <View style={styles.tableRow}>
-              <View style={styles.firstCellImage}>
-                <Image
-                  style={styles.tableImage}
-                  source={require('../assets/images/black_pearl.png')}
-                />
-              </View>
-              {players.map(player => {
-                const playerScore = this.getScoreForPlayer(player, 'nebulis');
-                return (
-                  <View
-                    key={`player_${player}_Nebulis`}
-                    style={[styles.tableHeaderCell, cellStyle]}
-                  >
-                    <TextInput
-                      theme={inputTheme}
-                      style={styles.input}
-                      value={playerScore}
-                      onChangeText={text =>
-                        this.handleInputChange(text, 'nebulis', player)
-                      }
-                      keyboardType="numeric"
-                    />
-                  </View>
-                );
-              })}
-            </View>
-          )}
-          {expLeviathan && (
-            <React.Fragment>
-              <View style={styles.tableRow}>
-                <View style={styles.firstCellImage}>
-                  <Image
-                    style={styles.tableImage}
-                    source={require('../assets/images/monster_l.png')}
-                  />
-                </View>
-                {players.map(player => {
-                  const playerScore = this.getScoreForPlayer(
-                    player,
-                    'leviathan'
-                  );
-                  return (
-                    <View
-                      key={`player_${player}_Leviathan`}
-                      style={[styles.tableHeaderCell, cellStyle]}
-                    >
-                      <TextInput
-                        theme={inputTheme}
-                        style={styles.input}
-                        value={playerScore}
-                        onChangeText={text =>
-                          this.handleInputChange(text, 'leviathan', player)
-                        }
-                        keyboardType="numeric"
-                      />
-                    </View>
-                  );
-                })}
-              </View>
-              <View style={styles.tableRow}>
-                <View style={[styles.firstCellImage, { borderBottomWidth: 0 }]}>
-                  <Image
-                    style={styles.tableImage}
-                    source={require('../assets/images/wound.png')}
-                  />
-                </View>
-                {players.map(player => {
-                  const playerScore = this.getScoreForPlayer(player, 'wounds');
-                  return (
-                    <View
-                      key={`player_${player}_LeviathanWounds`}
-                      style={[
-                        styles.tableHeaderCell,
-                        cellStyle,
-                        { borderBottomWidth: 0 },
-                      ]}
-                    >
-                      <TextInput
-                        theme={inputTheme}
-                        style={styles.input}
-                        value={playerScore}
-                        onChangeText={text =>
-                          this.handleInputChange(text, 'wounds', player)
-                        }
-                        keyboardType="numeric"
-                      />
-                    </View>
-                  );
-                })}
-              </View>
-            </React.Fragment>
-          )}
-          <Image
-            source={require('../assets/images/separator.png')}
-            style={styles.separator}
+
+          <TableHeader players={players} playersCount={playersCount} />
+          <Table
+            players={players}
+            playersCount={playersCount}
+            expKraken={expKraken}
+            expLeviathan={expLeviathan}
+            renderCell={this.renderCell}
           />
-          <Button style={styles.cta} raised onPress={this.saveScores}>
-            hakuna matata
-          </Button>
         </KeyboardAwareScrollView>
+        <Button style={styles.cta} raised onPress={this.saveScores}>
+          hakuna matata
+        </Button>
         {/* TODO: Animate header */}
         <LinearGradient
           colors={['rgba(9, 29, 65, 1)', 'rgba(9, 29, 65, 0.3)']}
@@ -293,48 +166,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderRadius: 5,
   },
-  tableImage: {
-    width: 50,
-    height: 50,
-    borderRadius: 25,
-    resizeMode: 'contain',
-    backgroundColor: theme.colors.background,
-  },
-  empty: {
-    width: 50,
-  },
-  tableRow: {
-    flexDirection: 'row',
-  },
-  firstCellImage: {
-    paddingHorizontal: 10,
-    paddingVertical: 10,
-    borderColor: theme.colors.primary,
-    borderWidth: StyleSheet.hairlineWidth,
-    borderTopWidth: 0,
-  },
-  tableHeaderCell: {
-    borderColor: theme.colors.primary,
-    borderWidth: StyleSheet.hairlineWidth,
-    borderTopWidth: 0,
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    paddingVertical: 5,
-  },
   input: {
     flex: 1,
-  },
-  separator: {
-    width: width - 20,
-    resizeMode: 'contain',
-    marginTop: 20,
-    marginHorizontal: 10,
   },
   cta: {
     backgroundColor: theme.colors.accent,
     position: 'absolute',
-    bottom: 20,
+    bottom: 10,
     left: 10,
     right: 10,
     alignSelf: 'flex-end',

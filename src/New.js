@@ -215,7 +215,7 @@ const styles = StyleSheet.create({
   cta: {
     backgroundColor: theme.colors.accent,
     position: 'absolute',
-    bottom: 20,
+    bottom: 10,
     left: 10,
     right: 10,
     alignSelf: 'flex-end',
