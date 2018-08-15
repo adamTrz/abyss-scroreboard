@@ -3,6 +3,7 @@ import * as React from 'react';
 import { StyleSheet, Image } from 'react-native';
 import { SafeAreaView, DrawerActions } from 'react-navigation';
 import { DrawerItem } from 'react-native-paper';
+import * as firebase from 'firebase';
 
 import theme from '../theme';
 
@@ -33,6 +34,10 @@ export default class Drawer extends React.Component<Props> {
     />
   );
 
+  signOut = () => {
+    firebase.auth().signOut();
+  };
+
   render() {
     return (
       <SafeAreaView style={styles.container}>
@@ -41,6 +46,14 @@ export default class Drawer extends React.Component<Props> {
           source={require('../assets/images/badge1.png')}
         />
         {items.map(this.renderItem)}
+        <DrawerItem
+          theme={{ fonts: { medium: 'spqr' } }}
+          key={'signOut'}
+          label={'SIGN OUT'}
+          onPress={this.signOut}
+          icon={require('../assets/images/perle.png')}
+          style={styles.drawerItem}
+        />
       </SafeAreaView>
     );
   }
@@ -49,7 +62,7 @@ export default class Drawer extends React.Component<Props> {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: theme.colors.drawerBackground,
+    backgroundColor: theme.colors.background,
     alignItems: 'center',
   },
   avatar: {

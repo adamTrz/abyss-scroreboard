@@ -1,16 +1,24 @@
 /* @flow */
 import React from 'react';
 import { DefaultTheme, Provider, Text } from 'react-native-paper';
-import { createDrawerNavigator, createStackNavigator } from 'react-navigation';
+import {
+  createDrawerNavigator,
+  createStackNavigator,
+  createSwitchNavigator,
+} from 'react-navigation';
 import { Font, AppLoading, Asset } from 'expo';
 import { StatusBar } from 'react-native';
+import * as firebase from 'firebase';
 
 import Main from './src';
 import New from './src/New';
 import NewScores from './src/NewScores';
+import Login from './src/Login';
 import Settings from './src/Settings';
 import Drawer from './src/Drawer';
 import theme from './theme';
+
+type Props = NavigationProps<{}>;
 
 const appTheme = {
   ...DefaultTheme,
@@ -46,7 +54,8 @@ const Router = createStackNavigator({
   },
 });
 
-const App = createDrawerNavigator(
+// TODO: Drawer for Android, TabNavigator for iOS
+const AppStack = createDrawerNavigator(
   {
     Router: {
       screen: Router,
@@ -57,18 +66,45 @@ const App = createDrawerNavigator(
   }
 );
 
+const LoginStack = createStackNavigator(
+  {
+    Login: {
+      screen: Login,
+    },
+  },
+  {
+    navigationOptions: { header: null },
+  }
+);
+
 type State = {
-  fontsLoaded: boolean,
+  assetsLoaded: boolean,
+  user: ?*,
 };
 
-export default class Abyss extends React.Component<void, State> {
+// eslint-disable-next-line react/no-multi-comp
+class App extends React.Component<Props, State> {
   state = {
-    fontsLoaded: false,
+    assetsLoaded: false,
+    user: null,
   };
 
   componentDidMount() {
     StatusBar.setBarStyle('light-content');
+    this.initFirebase();
   }
+
+  initFirebase = () => {
+    const config = {
+      apiKey: 'AIzaSyCVIyTocX9_Xh-rkHYlJ0UsbytauqV_3ds',
+      authDomain: 'abyss-16d0f.firebaseapp.com',
+      databaseURL: 'https://abyss-16d0f.firebaseio.com',
+      projectId: 'abyss-16d0f',
+      storageBucket: 'abyss-16d0f.appspot.com',
+      messagingSenderId: '361042150852',
+    };
+    firebase.initializeApp(config);
+  };
 
   loadAssets = async () => {
     await this.loadImages();
@@ -95,15 +131,42 @@ export default class Abyss extends React.Component<void, State> {
   };
 
   render() {
-    return !this.state.fontsLoaded ? (
+    return !this.state.assetsLoaded ? (
       <AppLoading
         startAsync={this.loadAssets}
-        onFinish={() => this.setState({ fontsLoaded: true })}
+        onFinish={() => this.setState({ assetsLoaded: true })}
       />
     ) : (
       <Provider theme={appTheme}>
-        <App />
+        <Switch />
       </Provider>
     );
   }
 }
+
+// eslint-disable-next-line react/no-multi-comp
+class Loading extends React.Component<Props> {
+  componentDidMount() {
+    firebase.auth().onAuthStateChanged(user => {
+      if (user) this.props.navigation.navigate('App');
+      else this.props.navigation.navigate('Login');
+    });
+  }
+
+  render() {
+    return null;
+  }
+}
+
+const Switch = createSwitchNavigator(
+  {
+    Loading,
+    App: AppStack,
+    Login: LoginStack,
+  },
+  {
+    initialRouteName: 'Loading',
+  }
+);
+
+export default App;
