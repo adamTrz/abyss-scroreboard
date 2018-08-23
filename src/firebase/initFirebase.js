@@ -1,7 +1,7 @@
 /* @flow */
 import * as firebase from 'firebase';
 
-import CONFIG from './config';
+import CONFIG from '../../credentials/firebaseConfig';
 
 firebase.initializeApp(CONFIG);
 
