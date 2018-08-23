@@ -1,6 +1,6 @@
 /* @flow */
 import * as React from 'react';
-import { Headline, TextInput, Button } from 'react-native-paper';
+import { Headline, TextInput, Button, Snackbar } from 'react-native-paper';
 import { SafeAreaView } from 'react-navigation';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { StyleSheet, Dimensions, Image } from 'react-native';
@@ -11,6 +11,7 @@ import BackButton from './components/BackButton';
 import TableHeader from './components/TableHeader';
 import TableScores from './components/TableScores';
 import Table from './components/Table';
+import { createGame } from './firebase';
 
 const { width } = Dimensions.get('window');
 
@@ -44,11 +45,16 @@ type State = {
   scores: {
     [key: string]: Score,
   },
+  message: string,
 };
 
 class NewScores extends React.Component<Props, State> {
   state = {
-    scores: {},
+    scores: this.props.navigation.state.params.players.reduce(
+      (prev, curr) => ({ ...prev, [curr]: {} }),
+      {}
+    ),
+    message: '',
   };
 
   inputRefs: Array<?TextInput> = [];
@@ -105,7 +111,18 @@ class NewScores extends React.Component<Props, State> {
     const wholeScores = Object.keys(scores).map((player, idx) => ({
       [player]: { ...scores[player], total: playersTotal[idx] },
     }));
-    console.log(wholeScores);
+    createGame(wholeScores)
+      .then(_ => {
+        this.setState({
+          message: 'Game saved',
+          scores: this.props.navigation.state.params.players.reduce(
+            (prev, curr) => ({ ...prev, [curr]: {} }),
+            {}
+          ),
+        });
+        this.props.navigation.popToTop();
+      })
+      .catch(e => this.setState({ message: e.message }));
   };
 
   renderCell = (key: Category, player: string, index: number) => {
@@ -163,6 +180,12 @@ class NewScores extends React.Component<Props, State> {
           <BackButton navigation={this.props.navigation} />
           <Headline style={{ fontFamily: 'spqr' }}>Scores</Headline>
         </LinearGradient>
+        <Snackbar
+          onDismiss={() => this.setState({ message: '' })}
+          visible={!!this.state.message}
+        >
+          {this.state.message}
+        </Snackbar>
       </SafeAreaView>
     );
   }

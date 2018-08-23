@@ -6,11 +6,32 @@ import { SafeAreaView } from 'react-navigation';
 
 import theme from '../theme';
 import Hamburger from './components/Hamburger';
+import GamesList from './components/GamesList';
+import { fetchGames, type Game } from './firebase';
 
 const { width, height } = Dimensions.get('window');
 
 type Props = NavigationProps<{}>;
-export default class App extends React.Component<Props> {
+
+type GameData = {
+  [id: string]: Game,
+};
+type State = {
+  games: Array<GameData>,
+};
+export default class App extends React.Component<Props, State> {
+  state = {
+    games: [],
+  };
+
+  componentDidMount() {
+    this.fetchGames();
+  }
+
+  fetchGames = async () => {
+    this.setState({ games: await fetchGames() });
+  };
+
   render() {
     return (
       <SafeAreaView style={styles.container}>
@@ -24,6 +45,7 @@ export default class App extends React.Component<Props> {
           />
           <Text style={styles.header}>MY GAMES</Text>
           <Hamburger navigation={this.props.navigation} />
+          <GamesList games={this.state.games} />
         </ImageBackground>
       </SafeAreaView>
     );

@@ -8,10 +8,9 @@ import {
   Alert,
 } from 'react-native';
 import { SafeAreaView } from 'react-navigation';
-import * as firebase from 'firebase';
 import { TextInput, Button, Text } from 'react-native-paper';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-
+import { signIn, signUp } from './firebase';
 import theme, { inputTheme } from '../theme';
 
 const { width } = Dimensions.get('window');
@@ -32,28 +31,22 @@ export default class Login extends React.Component<Props, State> {
   passwordInput: ?TextInput;
 
   signInWithUserAndPass = () => {
-    firebase
-      .auth()
-      .createUserWithEmailAndPassword(this.state.email, this.state.password)
-      .catch(error => {
-        const errorCode = error.code;
-        if (errorCode === 'auth/email-already-in-use') {
-          this.logInWithUserAndPass();
-          return;
-        }
-        const errorMessage = error.message;
-        Alert.alert('Oops. Something went wrong.', errorMessage);
-      });
+    signUp(this.state.email, this.state.password).catch(error => {
+      const errorCode = error.code;
+      if (errorCode === 'auth/email-already-in-use') {
+        this.logInWithUserAndPass();
+        return;
+      }
+      const errorMessage = error.message;
+      Alert.alert('Oops. Something went wrong.', errorMessage);
+    });
   };
 
   logInWithUserAndPass = () => {
-    firebase
-      .auth()
-      .signInWithEmailAndPassword(this.state.email, this.state.password)
-      .catch(error => {
-        const errorMessage = error.message;
-        Alert.alert('Oops. Something went wrong.', errorMessage);
-      });
+    signIn(this.state.email, this.state.password).catch(error => {
+      const errorMessage = error.message;
+      Alert.alert('Oops. Something went wrong.', errorMessage);
+    });
   };
 
   focusPaswordInput = () => {

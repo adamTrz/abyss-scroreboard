@@ -19,6 +19,9 @@ import Settings from './src/Settings';
 import Drawer from './src/Drawer';
 import theme from './theme';
 
+// $FlowFixMe
+console.ignoredYellowBox = ['Setting a timer']; // eslint-disable-line no-console
+
 type Props = NavigationProps<{}>;
 
 const appTheme = {
@@ -92,20 +95,7 @@ class App extends React.Component<Props, State> {
 
   componentDidMount() {
     StatusBar.setBarStyle('light-content');
-    this.initFirebase();
   }
-
-  initFirebase = () => {
-    const config = {
-      apiKey: 'AIzaSyCVIyTocX9_Xh-rkHYlJ0UsbytauqV_3ds',
-      authDomain: 'abyss-16d0f.firebaseapp.com',
-      databaseURL: 'https://abyss-16d0f.firebaseio.com',
-      projectId: 'abyss-16d0f',
-      storageBucket: 'abyss-16d0f.appspot.com',
-      messagingSenderId: '361042150852',
-    };
-    firebase.initializeApp(config);
-  };
 
   loadAssets = async () => {
     await this.loadImages();
