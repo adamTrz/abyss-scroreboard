@@ -12,35 +12,12 @@ import TableHeader from './components/TableHeader';
 import TableScores from './components/TableScores';
 import Table from './components/Table';
 import { createGame } from './firebase';
+import type { Category, Score, GameData } from './types';
 
 const { width } = Dimensions.get('window');
 
-export type GameData = {
-  expKraken: boolean,
-  expLeviathan: boolean,
-  playersCount: number,
-  players: Array<string>,
-};
 type Props = NavigationProps<{ state: { params: GameData } }>;
 
-export type Category =
-  | 'keys'
-  | 'lords'
-  | 'allies'
-  | 'monsters'
-  | 'nebulis'
-  | 'leviathan'
-  | 'wounds';
-
-type Score = {
-  keys: string,
-  lords: string,
-  allies: string,
-  monsters: string,
-  nebulis?: string,
-  leviathan?: string,
-  wounds?: string,
-};
 type State = {
   scores: {
     [key: string]: Score,

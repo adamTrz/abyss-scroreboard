@@ -3,7 +3,7 @@ import * as React from 'react';
 import { StyleSheet, Dimensions, Image, View } from 'react-native';
 
 import theme from '../../theme';
-import type { Category, GameData } from '../NewScores';
+import type { Category, GameData } from '../types';
 
 const { width } = Dimensions.get('window');
 

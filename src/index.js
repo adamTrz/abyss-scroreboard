@@ -7,17 +7,15 @@ import { SafeAreaView } from 'react-navigation';
 import theme from '../theme';
 import Hamburger from './components/Hamburger';
 import GamesList from './components/GamesList';
-import { fetchGames, type Game } from './firebase';
+import { fetchGames } from './firebase';
+import type { Game } from './types';
 
 const { width, height } = Dimensions.get('window');
 
 type Props = NavigationProps<{}>;
 
-type GameData = {
-  [id: string]: Game,
-};
 type State = {
-  games: Array<GameData>,
+  games: Array<?{ [id: string]: Game }>,
 };
 export default class App extends React.Component<Props, State> {
   state = {

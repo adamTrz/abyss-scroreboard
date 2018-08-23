@@ -2,23 +2,10 @@
 import firebase from './initFirebase';
 
 import { dbRefs } from './dbRefs';
+import type { Game } from '../types';
 
 const dbModule = firebase.database();
 const authModule = firebase.auth();
-
-type Score = {
-  keys: string,
-  lords: string,
-  allies: string,
-  monsters: string,
-  nebulis?: string,
-  leviathan?: string,
-  wounds?: string,
-  total: number,
-};
-export type Game = Array<{
-  [player: string]: Score,
-}>;
 
 /**
  * DB
@@ -69,7 +56,6 @@ export const fetchGames = async () => {
       [gameId]: game,
     };
   });
-  console.log('games', games);
   return games;
 };
 
