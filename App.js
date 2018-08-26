@@ -1,6 +1,10 @@
 /* @flow */
 import React from 'react';
-import { DefaultTheme, Provider, Text } from 'react-native-paper';
+import {
+  DefaultTheme,
+  Provider as PaperProvider,
+  Text,
+} from 'react-native-paper';
 import {
   createDrawerNavigator,
   createStackNavigator,
@@ -9,6 +13,8 @@ import {
 import { Font, AppLoading, Asset } from 'expo';
 import { StatusBar } from 'react-native';
 import * as firebase from 'firebase';
+import { Provider as StoreProvider } from 'react-redux';
+import { PersistGate } from 'redux-persist/integration/react';
 
 import Main from './src';
 import New from './src/New';
@@ -18,9 +24,12 @@ import Login from './src/Login';
 import Settings from './src/Settings';
 import Drawer from './src/Drawer';
 import theme from './theme';
+import configureStore from './src/store/configureStore';
 
 // $FlowFixMe
 console.ignoredYellowBox = ['Setting a timer']; // eslint-disable-line no-console
+
+const { store, persistor } = configureStore();
 
 type Props = NavigationProps<{}>;
 
@@ -128,9 +137,13 @@ class App extends React.Component<Props, State> {
         onFinish={() => this.setState({ assetsLoaded: true })}
       />
     ) : (
-      <Provider theme={appTheme}>
-        <Switch />
-      </Provider>
+      <StoreProvider store={store}>
+        <PersistGate loading={<SplashScreen />} persistor={persistor}>
+          <PaperProvider theme={appTheme}>
+            <Switch />
+          </PaperProvider>
+        </PersistGate>
+      </StoreProvider>
     );
   }
 }

@@ -3,33 +3,26 @@ import * as React from 'react';
 import { Image, StyleSheet, Dimensions, ImageBackground } from 'react-native';
 import { Text } from 'react-native-paper';
 import { SafeAreaView } from 'react-navigation';
+import { connect } from 'react-redux';
 
 import theme from '../theme';
 import Hamburger from './components/Hamburger';
-import GamesList from './components/GamesList';
-import { fetchGames } from './firebase';
-import type { Game } from './types';
+import ResultsList from './components/ResultsList';
+import { fetchGameResults } from './store/games/actions';
 
 const { width, height } = Dimensions.get('window');
 
-type Props = NavigationProps<{}>;
-
-type State = {
-  games: Array<?{ [id: string]: Game }>,
+type Score = Array<{ [player: string]: number }>;
+type Props = NavigationProps<{}> & {
+  fetchGameResults: typeof fetchGameResults,
+  results: Array<Score>,
+  gamesLoading: boolean,
 };
-export default class App extends React.Component<Props, State> {
-  state = {
-    games: [],
-  };
 
+class App extends React.Component<Props> {
   componentDidMount() {
-    this.fetchGames();
+    this.props.fetchGameResults();
   }
-
-  fetchGames = async () => {
-    const games = await fetchGames();
-    this.setState({ games });
-  };
 
   render() {
     return (
@@ -44,7 +37,7 @@ export default class App extends React.Component<Props, State> {
           />
           <Text style={styles.header}>MY GAMES</Text>
           <Hamburger navigation={this.props.navigation} />
-          <GamesList games={this.state.games} />
+          <ResultsList results={this.props.results} />
         </ImageBackground>
       </SafeAreaView>
     );
@@ -76,3 +69,13 @@ const styles = StyleSheet.create({
     minWidth: 40,
   },
 });
+
+const mapStateToProps = state => ({
+  results: state.games.games,
+  gamesLoading: state.games.gamesLoading,
+});
+
+export default connect(
+  mapStateToProps,
+  { fetchGameResults }
+)(App);

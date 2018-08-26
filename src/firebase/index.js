@@ -5,7 +5,6 @@ import { dbRefs } from './dbRefs';
 import type { Score } from '../types';
 
 const dbModule = firebase.firestore();
-
 const authModule = firebase.auth();
 
 /**
@@ -42,7 +41,10 @@ export const fetchGames = async () => {
     .get()
     .then(snap => {
       const games = [];
-      snap.forEach(s => games.push(s.data()));
+      snap.forEach(s => {
+        const game = s.data();
+        games.push(game.total);
+      });
       return games;
     })
     .catch(_ => []);
