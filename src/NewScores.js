@@ -83,12 +83,17 @@ class NewScores extends React.Component<Props, State> {
   };
 
   saveScores = () => {
+    const {
+      navigation: {
+        state: {
+          params: { players },
+        },
+      },
+    } = this.props;
     const { scores } = this.state;
     const playersTotal = this.calculateScores();
-    const wholeScores = Object.keys(scores).map((player, idx) => ({
-      [player]: { ...scores[player], total: playersTotal[idx] },
-    }));
-    createGame(wholeScores)
+    const total = players.map((p, idx) => ({ [p]: playersTotal[idx] }));
+    createGame(scores, total)
       .then(_ => {
         this.setState({
           message: 'Game saved',

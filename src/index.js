@@ -27,7 +27,8 @@ export default class App extends React.Component<Props, State> {
   }
 
   fetchGames = async () => {
-    this.setState({ games: await fetchGames() });
+    const games = await fetchGames();
+    this.setState({ games });
   };
 
   render() {

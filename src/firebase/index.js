@@ -2,61 +2,50 @@
 import firebase from './initFirebase';
 
 import { dbRefs } from './dbRefs';
-import type { Game } from '../types';
+import type { Score } from '../types';
 
-const dbModule = firebase.database();
+const dbModule = firebase.firestore();
+
 const authModule = firebase.auth();
 
 /**
  * DB
  */
-export const createGame = async (game: Game) => {
+export const createGame = async (
+  scores: {
+    [key: string]: Score,
+  },
+  total: Array<{ [player: string]: number }>
+) => {
   const { currentUser } = authModule;
   const userId = currentUser.uid;
   if (!userId) return new Error('User unathorized');
-  try {
-    const gameRef = await dbModule
-      .ref(`${dbRefs.gamesList}`)
-      .push(game, error => {
-        if (error) throw error;
-      });
-    await dbModule
-      .ref(`${dbRefs.userList}/${userId}`)
-      .child(dbRefs.userGamesSuffix)
-      .child(gameRef.key)
-      .set(gameRef.key, error => {
-        if (error) throw error;
-      });
-    return gameRef.key;
-  } catch (error) {
-    return new Error(error.message);
-  }
+  return dbModule
+    .collection(dbRefs.gamesList)
+    .add({
+      userId,
+      scores,
+      total,
+    })
+    .then(ref => ref.id)
+    .catch(err => {
+      throw new Error(err.message);
+    });
 };
 
 export const fetchGames = async () => {
   const { currentUser } = authModule;
   const userId = currentUser.uid;
-  if (!userId) return [];
-  const idsSnapshots = await dbModule
-    .ref(`${dbRefs.userList}/${userId}`)
-    .child(dbRefs.userGamesSuffix)
-    .once('value');
-  const ids = idsSnapshots.val();
-  const gamesIds = Object.keys(ids);
-  if (!gamesIds || !gamesIds.length) return [];
-  const gamePromises = gamesIds.map(gameId =>
-    dbModule.ref(`${dbRefs.gamesList}/${gameId}`).once('value')
-  );
-  const gamesSnapshots = await Promise.all(gamePromises);
-  // $FlowFixMe
-  const games = gamesSnapshots.map((snap, id) => {
-    const gameId = gamesIds[id];
-    const game = snap.val();
-    return {
-      [gameId]: game,
-    };
-  });
-  return games;
+  return dbModule
+    .collection(dbRefs.gamesList)
+    .where('userId', '==', userId)
+    .get()
+    .then(snap => {
+      const games = [];
+      snap.forEach(s => games.push(s.data()));
+      return games;
+    })
+    .catch(_ => []);
 };
 
 /**
