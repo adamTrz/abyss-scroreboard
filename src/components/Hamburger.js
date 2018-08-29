@@ -4,6 +4,8 @@ import { Headline, TouchableRipple } from 'react-native-paper';
 import { StyleSheet } from 'react-native';
 import { Constants } from 'expo';
 
+import theme from '../../theme';
+
 type Props = NavigationProps<{}> & { style?: * };
 
 const Hamburger = (props: Props) => (
@@ -11,7 +13,7 @@ const Hamburger = (props: Props) => (
     onPress={() => props.navigation.toggleDrawer()}
     style={[styles.burger, props.style]}
   >
-    <Headline style={{ fontFamily: 'spqr' }}>{`3`}</Headline>
+    <Headline style={{ fontFamily: theme.fonts.spqr }}>{`3`}</Headline>
   </TouchableRipple>
 );
 

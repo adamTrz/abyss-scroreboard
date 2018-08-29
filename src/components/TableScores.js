@@ -22,7 +22,7 @@ const TableScores = ({ scores }: Props) => {
       </View>
       {scores.map((score, idx) => (
         // eslint-disable-next-line react/no-array-index-key
-        <View key={`score_${idx}`} style={[styles.tableHeaderCell, cellStyle]}>
+        <View key={`score_${idx}`} style={[styles.TableRowCell, cellStyle]}>
           <Paragraph numberOfLines={1}>{score}</Paragraph>
         </View>
       ))}
@@ -45,7 +45,7 @@ const styles = StyleSheet.create({
   empty: {
     width: 50,
   },
-  tableHeaderCell: {
+  TableRowCell: {
     borderColor: theme.colors.primary,
     borderWidth: StyleSheet.hairlineWidth,
     flex: 1,

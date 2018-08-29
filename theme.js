@@ -16,6 +16,7 @@ const theme = {
     thin: 'lato-light',
     medium: 'lato-regular',
     regular: 'lato-regular',
+    spqr: 'spqr',
   },
 };
 

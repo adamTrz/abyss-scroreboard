@@ -8,7 +8,7 @@ import { LinearGradient, Constants } from 'expo';
 
 import theme, { inputTheme } from '../theme';
 import BackButton from './components/BackButton';
-import TableHeader from './components/TableHeader';
+import TableRow from './components/TableRow';
 import TableScores from './components/TableScores';
 import Table from './components/Table';
 import { createGame } from './firebase';
@@ -92,7 +92,14 @@ class NewScores extends React.Component<Props, State> {
     } = this.props;
     const { scores } = this.state;
     const playersTotal = this.calculateScores();
-    const total = players.map((p, idx) => ({ [p]: playersTotal[idx] }));
+
+    const total = players.reduce(
+      (prev, curr, idx) => ({
+        ...prev,
+        [curr]: playersTotal[idx],
+      }),
+      {}
+    );
     createGame(scores, total)
       .then(_ => {
         this.setState({
@@ -108,14 +115,24 @@ class NewScores extends React.Component<Props, State> {
   };
 
   renderCell = (key: Category, player: string, index: number) => {
+    const {
+      navigation: {
+        state: {
+          params: { playersCount },
+        },
+      },
+    } = this.props;
     const playerScore = this.getScoreForPlayer(player, key);
+    const cellStyle = {
+      width: width / (playersCount + 1),
+    };
     return (
       <TextInput
         ref={ref => {
           this.inputRefs[index] = ref;
         }}
         theme={inputTheme}
-        style={styles.input}
+        style={[styles.input, cellStyle]}
         value={playerScore}
         onChangeText={text => this.handleInputChange(text, key, player)}
         onSubmitEditing={() => this.focusNextInput(index)}
@@ -130,7 +147,7 @@ class NewScores extends React.Component<Props, State> {
     const {
       navigation: {
         state: {
-          params: { expKraken, expLeviathan, players, playersCount },
+          params: { expKraken, expLeviathan, players },
         },
       },
     } = this.props;
@@ -142,10 +159,10 @@ class NewScores extends React.Component<Props, State> {
             style={styles.image}
             source={require('../assets/images/politiciens.jpg')}
           />
-          <TableHeader players={players} playersCount={playersCount} />
+          <TableRow rowData={players} />
           <Table
             players={players}
-            playersCount={playersCount}
+            playersCount={players.length}
             expKraken={expKraken}
             expLeviathan={expLeviathan}
             renderCell={this.renderCell}
@@ -160,7 +177,7 @@ class NewScores extends React.Component<Props, State> {
           style={styles.titleBar}
         >
           <BackButton navigation={this.props.navigation} />
-          <Headline style={{ fontFamily: 'spqr' }}>Scores</Headline>
+          <Headline style={{ fontFamily: theme.fonts.spqr }}>Scores</Headline>
         </LinearGradient>
         <Snackbar
           onDismiss={() => this.setState({ message: '' })}

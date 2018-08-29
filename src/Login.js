@@ -129,7 +129,7 @@ const styles = StyleSheet.create({
     resizeMode: 'contain',
   },
   header: {
-    fontFamily: 'spqr',
+    fontFamily: theme.fonts.spqr,
     fontSize: 26,
   },
   input: {

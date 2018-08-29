@@ -44,7 +44,7 @@ class Table extends React.Component<Props> {
             {players.map((player, idx) => (
               <View
                 key={`player_${key}_${player}`}
-                style={[styles.tableHeaderCell, cellStyle]}
+                style={[styles.TableRowCell, cellStyle]}
               >
                 {renderCell(key, player, index * playersCount + idx + 1)}
               </View>
@@ -62,7 +62,7 @@ class Table extends React.Component<Props> {
             {players.map((player, idx) => (
               <View
                 key={`player_${player}_Nebulis`}
-                style={[styles.tableHeaderCell, cellStyle]}
+                style={[styles.TableRowCell, cellStyle]}
               >
                 {renderCell(
                   'nebulis',
@@ -85,7 +85,7 @@ class Table extends React.Component<Props> {
               {players.map((player, idx) => (
                 <View
                   key={`player_${player}_Leviathan`}
-                  style={[styles.tableHeaderCell, cellStyle]}
+                  style={[styles.TableRowCell, cellStyle]}
                 >
                   {renderCell(
                     'leviathan',
@@ -106,7 +106,7 @@ class Table extends React.Component<Props> {
                 <View
                   key={`player_${player}_LeviathanWounds`}
                   style={[
-                    styles.tableHeaderCell,
+                    styles.TableRowCell,
                     cellStyle,
                     { borderBottomWidth: 0 },
                   ]}
@@ -154,7 +154,7 @@ const styles = StyleSheet.create({
     borderWidth: StyleSheet.hairlineWidth,
     borderTopWidth: 0,
   },
-  tableHeaderCell: {
+  TableRowCell: {
     borderColor: theme.colors.primary,
     borderWidth: StyleSheet.hairlineWidth,
     borderTopWidth: 0,

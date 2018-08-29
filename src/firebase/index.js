@@ -14,7 +14,7 @@ export const createGame = async (
   scores: {
     [key: string]: Score,
   },
-  total: Array<{ [player: string]: number }>
+  total: { [player: string]: number }
 ) => {
   const { currentUser } = authModule;
   const userId = currentUser.uid;
@@ -23,6 +23,7 @@ export const createGame = async (
     .collection(dbRefs.gamesList)
     .add({
       userId,
+      timestamp: Date.now(),
       scores,
       total,
     })
@@ -43,7 +44,7 @@ export const fetchGames = async () => {
       const games = [];
       snap.forEach(s => {
         const game = s.data();
-        games.push(game.total);
+        games.push({ id: s.id, total: game.total, timestamp: game.timestamp });
       });
       return games;
     })

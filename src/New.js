@@ -162,7 +162,9 @@ export default class NewScore extends React.Component<Props, State> {
           style={styles.titleBar}
         >
           <BackButton navigation={this.props.navigation} />
-          <Headline style={{ fontFamily: 'spqr' }}>Create new game</Headline>
+          <Headline style={{ fontFamily: theme.fonts.spqr }}>
+            Create new game
+          </Headline>
         </LinearGradient>
       </SafeAreaView>
     );

@@ -8,26 +8,34 @@ import theme from '../../theme';
 const { width } = Dimensions.get('window');
 
 type Props = {
-  players: Array<string>,
-  playersCount: number,
+  rowData: Array<string | number>,
+  renderEmpty?: boolean,
+  fontFamily?: $Values<typeof theme.fonts>,
 };
 
-const TableHeader = ({ players, playersCount }: Props) => {
+const TableRow = ({
+  rowData,
+  renderEmpty,
+  fontFamily = theme.fonts.spqr,
+}: Props) => {
+  const numberOfCells = renderEmpty ? rowData.length + 1 : rowData.length;
   const cellStyle = {
-    width: width / (playersCount + 1),
+    width: width / numberOfCells,
   };
   return (
     <View style={styles.tableRow}>
-      <View style={styles.firstCellImage}>
-        <View style={styles.empty} />
-      </View>
-      {players.map(player => (
+      {!renderEmpty && (
+        <View style={styles.firstCellImage}>
+          <View style={styles.empty} />
+        </View>
+      )}
+      {rowData.map(data => (
         <View
-          key={`player${player}`}
-          style={[styles.tableHeaderCell, cellStyle]}
+          key={`cell_${Math.random()}_${data}`}
+          style={[styles.TableRowCell, cellStyle]}
         >
-          <Paragraph numberOfLines={1} style={{ fontFamily: 'spqr' }}>
-            {player}
+          <Paragraph numberOfLines={1} style={{ fontFamily }}>
+            {data}
           </Paragraph>
         </View>
       ))}
@@ -49,7 +57,7 @@ const styles = StyleSheet.create({
   empty: {
     width: 50,
   },
-  tableHeaderCell: {
+  TableRowCell: {
     borderColor: theme.colors.primary,
     borderWidth: StyleSheet.hairlineWidth,
     borderTopWidth: 0,
@@ -60,4 +68,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default TableHeader;
+export default TableRow;

@@ -25,7 +25,7 @@ export default class Drawer extends React.Component<Props> {
 
   renderItem = (item: { label: string, route: string }) => (
     <DrawerItem
-      theme={{ fonts: { medium: 'spqr' } }}
+      theme={{ fonts: { medium: theme.fonts.spqr } }}
       key={item.label}
       label={item.label.toUpperCase()}
       onPress={() => this.navigateTo(item.route)}
@@ -47,7 +47,7 @@ export default class Drawer extends React.Component<Props> {
         />
         {items.map(this.renderItem)}
         <DrawerItem
-          theme={{ fonts: { medium: 'spqr' } }}
+          theme={{ fonts: { medium: theme.fonts.spqr } }}
           key={'signOut'}
           label={'SIGN OUT'}
           onPress={this.signOut}

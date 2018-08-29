@@ -1,7 +1,6 @@
 /* @flow */
 import * as React from 'react';
 import { Image, StyleSheet, Dimensions, ImageBackground } from 'react-native';
-import { Text } from 'react-native-paper';
 import { SafeAreaView } from 'react-navigation';
 import { connect } from 'react-redux';
 
@@ -12,7 +11,12 @@ import { fetchGameResults } from './store/games/actions';
 
 const { width, height } = Dimensions.get('window');
 
-type Score = Array<{ [player: string]: number }>;
+type Score = {
+  id: string,
+  total: { [player: string]: number },
+  timestamp: number,
+};
+
 type Props = NavigationProps<{}> & {
   fetchGameResults: typeof fetchGameResults,
   results: Array<Score>,
@@ -35,9 +39,11 @@ class App extends React.Component<Props> {
             style={styles.image}
             source={require('../assets/images/logo-abyss.png')}
           />
-          <Text style={styles.header}>MY GAMES</Text>
           <Hamburger navigation={this.props.navigation} />
-          <ResultsList results={this.props.results} />
+          <ResultsList
+            loading={this.props.gamesLoading}
+            results={this.props.results}
+          />
         </ImageBackground>
       </SafeAreaView>
     );
@@ -57,10 +63,6 @@ const styles = StyleSheet.create({
     width,
     height: 200,
     resizeMode: 'contain',
-  },
-  header: {
-    fontFamily: 'spqr',
-    fontSize: 26,
   },
   hamburger: {
     position: 'absolute',

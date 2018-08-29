@@ -4,6 +4,8 @@ import { Headline, TouchableRipple } from 'react-native-paper';
 import { StyleSheet } from 'react-native';
 import { Constants } from 'expo';
 
+import theme from '../../theme';
+
 type Props = NavigationProps<{}> & { style?: * };
 
 const BackButton = (props: Props) => (
@@ -11,7 +13,7 @@ const BackButton = (props: Props) => (
     onPress={() => props.navigation.goBack()}
     style={[styles.btn, props.style]}
   >
-    <Headline style={{ fontFamily: 'spqr' }}>{`<`}</Headline>
+    <Headline style={{ fontFamily: theme.fonts.spqr }}>{`<`}</Headline>
   </TouchableRipple>
 );
 
