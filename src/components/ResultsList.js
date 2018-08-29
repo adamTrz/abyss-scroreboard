@@ -3,7 +3,7 @@ import * as React from 'react';
 import {
   Dimensions,
   ActivityIndicator,
-  FlatList,
+  SectionList,
   TouchableOpacity,
   StyleSheet,
   View,
@@ -23,8 +23,12 @@ type Props = {
   results: Array<Score>,
   loading: boolean,
 };
-
+type SectionData = { section: { title: string } };
 export default class ResultsList extends React.Component<Props> {
+  renderHeader = (sectionData: SectionData) => (
+    <Text style={styles.sectionHeader}>{sectionData.section.title}</Text>
+  );
+
   renderItem = (itemData: { item: Score }) => {
     const players = Object.keys(itemData.item.total);
     const scores = Object.values(itemData.item.total);
@@ -46,14 +50,21 @@ export default class ResultsList extends React.Component<Props> {
 
   render() {
     const { results, loading } = this.props;
+    const timestamps = results.map(r => r.timestamp);
+    const uniqueTimestamps = Array.from(new Set(timestamps));
+    const sections = uniqueTimestamps.map(t => ({
+      title: t,
+      data: results.filter(r => r.timestamp === t),
+    }));
     return (
       <View style={styles.container}>
         {loading && !results.length ? (
           <ActivityIndicator size="large" color={theme.colors.accent} />
         ) : (
-          <FlatList
-            data={results}
+          <SectionList
+            sections={sections}
             renderItem={this.renderItem}
+            renderSectionHeader={this.renderHeader}
             keyExtractor={item => item.id}
             ItemSeparatorComponent={() => <Separator />}
             ListHeaderComponent={() => <ListHeader />}
@@ -77,8 +88,11 @@ const styles = StyleSheet.create({
   header: {
     fontFamily: theme.fonts.spqr,
     fontSize: 26,
-    // alignSelf: 'center',
     textAlign: 'center',
+  },
+  sectionHeader: {
+    fontFamily: theme.fonts.thin,
+    paddingVertical: 3,
   },
   separator: {
     width,
