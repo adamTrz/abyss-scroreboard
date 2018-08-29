@@ -14,6 +14,10 @@ import TableRow from './TableRow';
 import theme from '../../theme';
 
 const { width } = Dimensions.get('window');
+
+const makeDateString = (timestamp: number) =>
+  new Date(timestamp).toLocaleDateString();
+
 type Score = {
   id: string,
   total: { [player: string]: number },
@@ -50,15 +54,15 @@ export default class ResultsList extends React.Component<Props> {
 
   render() {
     const { results, loading } = this.props;
-    const timestamps = results.map(r => r.timestamp);
-    const uniqueTimestamps = Array.from(new Set(timestamps));
-    const sections = uniqueTimestamps.map(t => ({
-      title: t,
-      data: results.filter(r => r.timestamp === t),
+    const dates = results.map(r => makeDateString(r.timestamp));
+    const uniqueDates = Array.from(new Set(dates));
+    const sections = uniqueDates.map(d => ({
+      title: d,
+      data: results.filter(r => makeDateString(r.timestamp) === d),
     }));
     return (
       <View style={styles.container}>
-        {loading && !results.length ? (
+        {loading || !results.length ? (
           <ActivityIndicator size="large" color={theme.colors.accent} />
         ) : (
           <SectionList
@@ -67,6 +71,7 @@ export default class ResultsList extends React.Component<Props> {
             renderSectionHeader={this.renderHeader}
             keyExtractor={item => item.id}
             ItemSeparatorComponent={() => <Separator />}
+            SectionSeparatorComponent={() => <Separator />}
             ListHeaderComponent={() => <ListHeader />}
           />
         )}
@@ -97,6 +102,7 @@ const styles = StyleSheet.create({
   separator: {
     width,
     height: 1,
-    backgroundColor: theme.colors.text,
+    backgroundColor: theme.colors.accent,
+    opacity: 0.5,
   },
 });
